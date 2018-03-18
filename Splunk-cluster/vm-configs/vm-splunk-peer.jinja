@@ -1,0 +1,56 @@
+{#
+Copyright 2016 Google Inc. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+#}
+
+# Create first mashine in {{ properties["zone"] }} zone 
+# with base 
+
+resources:
+- name: {{ env["name"] }}
+  type: compute.v1.instance
+  properties:
+    zone: {{ properties["zone"] }}
+    machineType: https://www.googleapis.com/compute/v1/projects/{{ env["project"] }}/zones/{{ properties["zone"] }}/machineTypes/{{ properties["machineType"] }}
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-1604-xenial-v20180306
+    networkInterfaces:
+    - network: $(ref.{{ properties["network"] }}.selfLink)
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    scheduling:
+      preemptible: true
+    metadata:
+      dependsOn:
+      - splunk-sh
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          apt update && apt upgrade -y && apt install -y htop
+          wget -O splunk-7.0.2-03bbabbd5c0f-linux-2.6-amd64.deb 'https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=7.0.2&product=splunk&filename=splunk-7.0.2-03bbabbd5c0f-linux-2.6-amd64.deb&wget=true'
+          sudo dpkg -i splunk*.deb
+          cd /opt/splunk
+          sleep 60
+          ./bin/splunk start --accept-license
+          ./bin/splunk enable boot-start
+          ping -c 1 splunk-sh | grep "PING" | cut -d '(' -f 2 | awk '{print $1}' | cut -d ')' -f 1 > splunk-sh.ip
+          export IP=$(cat splunk-sh.ip)
+          ./bin/splunk edit cluster-config -mode slave -master_uri https://$IP:8089 -replication_port 9887 -secret your_key -auth admin:changeme
+          ./bin/splunk restart 

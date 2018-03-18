@@ -1,0 +1,54 @@
+{#
+Copyright 2016 Google Inc. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+#}
+
+{% set  NETWORK_NAME = "splunk-sub" %}
+
+resources:
+- name: splunk-sh
+  type: vm-configs/vm-splunk-sh.jinja
+  properties:
+    machineType: n1-standard-1
+    zone: europe-west3-b
+    network: {{ NETWORK_NAME }}
+- name: splunk-first-peer
+  type: vm-configs/vm-splunk-sh.jinja
+  properties:
+    machineType: n1-standard-1
+    zone: europe-west3-b
+    network: {{ NETWORK_NAME }}
+- name: splunk-secound-peer
+  type: vm-configs/vm-splunk-peer.jinja
+  properties:
+    machineType: n1-standard-1
+    zone: europe-west3-b
+    network: {{ NETWORK_NAME }}
+- name: splunk-third-peer
+  type: vm-configs/vm-splunk-peer.jinja
+  properties:
+    machineType: n1-standard-1
+    zone: europe-west3-b
+    network: {{ NETWORK_NAME }}
+- name: splunk-fourth-peer
+  type: vm-configs/vm-splunk-peer.jinja
+  properties:
+    machineType: n1-standard-1
+    zone: europe-west3-b
+    network: {{ NETWORK_NAME }}
+- name: {{ NETWORK_NAME }}
+  type: network-configs/network-template.jinja
+- name: {{ NETWORK_NAME }}-firewall
+  type: network-configs/firewall-template.jinja
+  properties:
+    network: {{ NETWORK_NAME }}
