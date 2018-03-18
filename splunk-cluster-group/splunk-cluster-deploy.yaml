@@ -1,4 +1,4 @@
-# Copyright 2018 Google Inc. All rights reserved.
+# Copyright 2016 Google Inc. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,26 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# import part 
-
 imports:
-- path: vm-template.jinja
-- path: vm-template-2.jinja
-- path: network-template.jinja
-- path: firewall-template.jinja
-- path: compute-engine-template.jinja
+- path: vm-configs/vm-splunk-sh.jinja
+- path: vm-configs/vm-splunk-peer.jinja
+- path: network-configs/network-template.jinja
+- path: network-configs/firewall-template.jinja
+- path: vm-configs/compute-engine-template.jinja
 
-
-# all templeate 
 resources:
-- name: vm-1
-  type: vm-template.jinja
-# imported res form file 
-- name: vm-2
-  type: vm-template-2.jinja
-# adding network from templeate
-- name: new-network-one
-  type: network-template.jinja
-  # firewall ress form templeate 
-- name: firewall
-  type: firewall-template.jinja
+- name: compute-engine-setup
+  type: vm-configs/compute-engine-template.jinja
