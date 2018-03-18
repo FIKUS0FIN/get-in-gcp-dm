@@ -28,12 +28,14 @@ resources:
       initializeParams:
         sourceImage: https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/family/debian-8
     networkInterfaces:
-    - network: https://www.googleapis.com/compute/v1/projects/gcp-lab-epam/global/networks/default
+    - network: $(ref.a-new-network.selfLink)
       accessConfigs:
       - name: External NAT
         type: ONE_TO_ONE_NAT
 
 
+# Create second mashine in europe-west3-b 
+# with base 
 - name: the-second-vm
   type: compute.v1.instance
   properties:
@@ -47,7 +49,14 @@ resources:
       initializeParams:
         sourceImage: https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/family/debian-8
     networkInterfaces:
-    - network: https://www.googleapis.com/compute/v1/projects/gcp-lab-epam/global/networks/default
+    - network: $(ref.a-new-network.selfLink)
       accessConfigs:
       - name: External NAT
         type: ONE_TO_ONE_NAT
+
+# adding network for deployment 
+
+- name: a-new-network
+  type: compute.v1.network
+  properties:
+    IPv4Range: 10.0.0.1/16
