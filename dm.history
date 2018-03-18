@@ -1,0 +1,40 @@
+10000  gcloud deployment-manager deployments create deployment-with-2-vms --config two-vms.yaml
+10001  gcloud deployment-manager types list
+10002  gcloud deployment-manager deployments create deployment-with-2-vms_2 --config two-vms.yaml
+10003  gcloud deployment-manager deployments create deployment-with-2-vms-2 --config two-vms.yaml
+10004  gcloud deployment-manager deployments describe deployment-with-2-vms-2
+10005  gcloud deployment-manager deployments describe manifest-1521355802240 --deployment-with-2-vms-2
+10006  gcloud deployment-manager resources list --deployment deployment-with-2-vms
+10007  gcloud deployment-manager deployments delete deployment-with-2-vms 
+10008  gcloud deployment-manager deployments delete deployment-with-2-vms-2
+10015  gcloud deployment-manager deployments create deployment-with-references --config two-vms.yaml
+10016  gcloud deployment-manager deployments create deployment-with-references-2 --config two-vms.yaml
+10017  gcloud deployment-manager deployments deleate deployment-with-references-2 --config two-vms.yaml
+10018  gcloud deployment-manager deployments delete deployment-with-references-2 --config two-vms.yaml
+10019  gcloud deployment-manager deployments delete deployment-with-references-2 
+10020  gcloud deployment-manager deployments delete deployment-with-references-2 --config two-vms.yaml
+10021  gcloud deployment-manager deployments delete deployment-with-references
+10022  gcloud deployment-manager deployments delete deployment-with-references-2 --config two-vms.yaml
+10023  gcloud deployment-manager deployments create deployment-with-references-2 --config two-vms.yaml
+10028  gcloud deployment-manager deployments describe deployment-with-references
+10029  gcloud deployment-manager deployments describe deployment-with-references-2
+10030  gcloud deployment-manager deployments delete deployment-with-references-2
+10031  gcloud deployment-manager deployments create deployment-with-templates --config two-vms.yaml
+10032  gcloud deployment-manager deployments describe deployment-with-templates
+10033  gcloud deployment-manager deployments delete deployment-with-templates
+10035  gcloud deployment-manager deployments create deployment-with-many-templates \\n  --config config-with-many-templates.yaml
+10036  gcloud deployment-manager deployments describe  deployment-with-many-templates 
+10037  gcloud deployment-manager deployments delete deployment-with-many-templates 
+10038  gcloud deployment-manager deployments create deployment-with-many-templates \\n  --config config-with-many-templates.yaml
+10039  gcloud deployment-manager deployments delete  deployment-with-many-templates
+10040  gcloud deployment-manager deployments create deployment-with-many-templates \\n  --config config-with-many-templates.yaml
+10041  gcloud deployment-manager deployments delete  deployment-with-many-templates
+10042  gcloud deployment-manager deployments create deployment-with-many-templates \\n  --config config-with-many-templates.yaml
+10043  gcloud deployment-manager deployments delete  deployment-with-many-templates
+10044  gcloud deployment-manager deployments create deployment-with-many-templates \\n  --config config-with-many-templates.yaml
+10048  gcloud deployment-manager deployments delete deployment-with-many-templates
+10049  gcloud deployment-manager deployments create deployment-with-many-templates --config config-with-many-templates.yaml\n
+10050  gcloud deployment-manager deployments delete deployment-with-many-templates\n
+10051  gcloud deployment-manager deployments create deployment-with-many-templates --config config-with-many-templates.yaml\n
+10055  gcloud deployment-manager deployments delete deployment-with-many-templates
+10056  history | grep "gcloud deployment-manager" 
