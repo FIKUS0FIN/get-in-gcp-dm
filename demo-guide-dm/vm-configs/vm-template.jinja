@@ -39,4 +39,10 @@ resources:
       - key: startup-script
         value: |
           #!/bin/bash
-          sudo python -m SimpleHTTPServer 80
+          INSTANCE=$(curl http://metadata.google.internal/computeMetadata/v1/instance/hostname -H "Metadata-Flavor: Google")
+          echo "<html><header><title>Hello from Deployment Manager!</title></header>
+          <body><h2>Hello from $INSTANCE</h2>
+          <p>Deployment Manager bids you good day!</p>
+          </body>
+          </html>" > index.html
+          python -m SimpleHTTPServer 80

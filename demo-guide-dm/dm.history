@@ -38,3 +38,8 @@
 10051  gcloud deployment-manager deployments create deployment-with-many-templates --config config-with-many-templates.yaml\n
 10055  gcloud deployment-manager deployments delete deployment-with-many-templates
 10056  history | grep "gcloud deployment-manager" 
+10057  history | grep "gcloud deployment-manager" > dm.history
+10059  gcloud deployment-manager deployments create deployment-with-startup-script --config config-with-many-templates.yaml
+10068  gcloud deployment-manager deployments update deployment-with-startup-script  \\n  --config config-with-many-templates.yaml --preview
+10069  gcloud deployment-manager resources describe the-first-vm --deployment deployment-with-startup-script
+10070  gcloud deployment-manager deployments update deployment-with-startup-script
