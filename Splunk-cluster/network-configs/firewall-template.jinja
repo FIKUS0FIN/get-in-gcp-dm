@@ -14,7 +14,38 @@ limitations under the License.
 #}
 
 resources:
-- name: {{ env["name"] }}
+- name: {{ env["name"] }}-global-icmp
+  type: compute.v1.firewall
+  properties:
+    network: $(ref.{{ properties["network"] }}.selfLink)
+    sourceRanges: ["10.0.0.0/24"]
+    allowed:
+    - IPProtocol: icmp
+- name: {{ env["name"] }}-splunk-manage-ports
+  type: compute.v1.firewall
+  properties:
+    network: $(ref.{{ properties["network"] }}.selfLink)
+    sourceRanges: ["10.0.0.0/24"]
+    allowed:
+    - IPProtocol: TCP
+      ports: ["8000-9999"]
+- name: {{ env["name"] }}-internal-ssh
+  type: compute.v1.firewall
+  properties:
+    network: $(ref.{{ properties["network"] }}.selfLink)
+    sourceRanges: ["10.0.0.0/24"]
+    allowed:
+    - IPProtocol: TCP
+      ports: ["22"]
+- name: {{ env["name"] }}-global-ssh
+  type: compute.v1.firewall
+  properties:
+    network: $(ref.{{ properties["network"] }}.selfLink)
+    sourceRanges: ["0.0.0.0/0"]
+    allowed:
+    - IPProtocol: TCP
+      ports: ["22"]
+- name: {{ env["name"] }}-splunk-web-port
   type: compute.v1.firewall
   properties:
     network: $(ref.{{ properties["network"] }}.selfLink)
@@ -22,3 +53,19 @@ resources:
     allowed:
     - IPProtocol: TCP
       ports: ["8000"]
+- name: {{ env["name"] }}-external-https
+  type: compute.v1.firewall
+  properties:
+    network: $(ref.{{ properties["network"] }}.selfLink)
+    sourceRanges: ["0.0.0.0/0"]
+    allowed:
+    - IPProtocol: TCP
+      ports: ["443"]
+- name: {{ env["name"] }}-udp514
+  type: compute.v1.firewall
+  properties:
+    network: $(ref.{{ properties["network"] }}.selfLink)
+    sourceRanges: ["10.0.0.0/24"]
+    allowed:
+    - IPProtocol: UDP
+      ports: ["514"]
