@@ -14,7 +14,6 @@
 
 imports:
 - path: vm-configs/vm-template.jinja
-- path: vm-configs/vm-template-2.jinja
 - path: network-configs/network-template.jinja
 - path: network-configs/firewall-template.jinja
 - path: vm-configs/compute-engine-template.jinja

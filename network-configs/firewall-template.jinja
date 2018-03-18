@@ -14,10 +14,10 @@ limitations under the License.
 #}
 
 resources:
-- name: a-firewall-rule
+- name: {{ env["name"] }}
   type: compute.v1.firewall
   properties:
-    network: $(ref.a-new-network.selfLink)
+    network: $(ref.{{ properties["network"] }}.selfLink)
     sourceRanges: ["0.0.0.0/0"]
     allowed:
     - IPProtocol: TCP

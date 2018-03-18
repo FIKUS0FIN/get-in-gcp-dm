@@ -13,12 +13,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #}
 
+{% set  NETWORK_NAME = "once-upon-a-custom-network" %}
+
 resources:
-- name: vm-1
+- name: the-first-vm
   type: vm-configs/vm-template.jinja
-- name: vm-2
-  type: vm-configs/vm-template-2.jinja
-- name: network-1
+  properties:
+    machineType: f1-micro
+    zone: us-central1-f
+    network: {{ NETWORK_NAME }}
+- name: the-second-vm
+  type: vm-configs/vm-template.jinja
+  properties:
+    machineType: g1-small
+    zone: us-central1-f
+    network: {{ NETWORK_NAME }}
+- name: {{ NETWORK_NAME }}
   type: network-configs/network-template.jinja
-- name: firewall-1
+- name: {{ NETWORK_NAME }}-firewall
   type: network-configs/firewall-template.jinja
+  properties:
+    network: {{ NETWORK_NAME }}

@@ -13,15 +13,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #}
 
-# Create first mashine in europe-west3-b zone 
+# Create first mashine in {{ properties["zone"] }} zone 
 # with base 
 
 resources:
-- name: the-first-vm
+- name: {{ env["name"] }}
   type: compute.v1.instance
   properties:
-    zone: europe-west3-b
-    machineType: https://www.googleapis.com/compute/v1/projects/gcp-lab-epam/zones/europe-west3-b/machineTypes/f1-micro
+    zone: {{ properties["zone"] }}
+    machineType: https://www.googleapis.com/compute/v1/projects/{{ env["project"] }}/zones/{{ properties["zone"] }}/machineTypes/{{ properties["machineType"] }}
     disks:
     - deviceName: boot
       type: PERSISTENT
@@ -30,7 +30,7 @@ resources:
       initializeParams:
         sourceImage: https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/family/debian-8
     networkInterfaces:
-    - network: $(ref.a-new-network.selfLink)
+    - network: $(ref.{{ properties["network"] }}.selfLink)
       accessConfigs:
       - name: External NAT
         type: ONE_TO_ONE_NAT
