@@ -36,7 +36,7 @@ resources:
     sourceRanges: ["10.0.0.0/24"]
     allowed:
     - IPProtocol: TCP
-      ports: ["22"]
+      ports: ["22","4444"]
 - name: {{ env["name"] }}-global-ssh
   type: compute.v1.firewall
   properties:
