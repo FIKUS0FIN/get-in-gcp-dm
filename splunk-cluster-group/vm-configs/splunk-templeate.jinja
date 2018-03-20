@@ -1,0 +1,49 @@
+{#
+Copyright 2016 Google Inc. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+#}
+
+resources:
+- name: {{ env["name"] }}
+  properties:
+    description: ''
+    properties:
+      disks:
+      - autoDelete: true
+        boot: true
+        deviceName: boot
+        initializeParams:
+          sourceImage: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-1604-xenial-v20180306
+        mode: READ_WRITE
+        type: PERSISTENT
+      machineType: {{ properties["machineType"] }}
+      scheduling:
+        preemptible: true
+      metadata:
+        items:
+        - key: startup-script
+          value: |
+            #!/bin/bash
+            apt update && apt upgrade -y && apt install -y htop
+            wget -O splunk-7.0.2-03bbabbd5c0f-linux-2.6-amd64.deb 'https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=7.0.2&product=splunk&filename=splunk-7.0.2-03bbabbd5c0f-linux-2.6-amd64.deb&wget=true'
+            sudo dpkg -i splunk*.deb
+            cd /opt/splunk
+            ping -c 20 google.com 
+            sleep 60
+            ./bin/splunk start --accept-license
+            ./bin/splunk enable boot-start
+            ./bin/splunk edit cluster-config -mode slave -master_uri https://splunk-sh:8089 -replication_port 9887 -secret your_key -auth admin:changeme
+            ./bin/splunk restart 
+      networkInterfaces:
+        - network: $(ref.{{ properties["network"] }}.selfLink)
+  type: compute.v1.instanceTemplate

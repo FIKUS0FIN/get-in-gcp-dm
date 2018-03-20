@@ -36,6 +36,9 @@ resources:
         type: ONE_TO_ONE_NAT
     scheduling:
       preemptible: true
+    tags:
+      items:
+        - http-server
     metadata:
       dependsOn:
       - splunk-sh
@@ -44,16 +47,16 @@ resources:
       - key: startup-script
         value: |
           #!/bin/bash
-          apt update && apt upgrade -y && apt install -y htop
-          wget -O splunk-7.0.2-03bbabbd5c0f-linux-2.6-amd64.deb 'https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=7.0.2&product=splunk&filename=splunk-7.0.2-03bbabbd5c0f-linux-2.6-amd64.deb&wget=true'
-          sudo dpkg -i splunk*.deb
-          cd /opt/splunk
-          ping -c 20 google.com 
-          sleep 60
-          ./bin/splunk start --accept-license
-          ./bin/splunk enable boot-start
-          ping -c 1 splunk-sh | grep "PING" | cut -d '(' -f 2 | awk '{print $1}' | cut -d ')' -f 1 > splunk-sh.ip
-          export IP=$(cat splunk-sh.ip)
-          echo "$(ref.splunk-sh.networkInterfaces[0].accessConfigs[0].natIP)"
-          ./bin/splunk edit cluster-config -mode slave -master_uri https://$IP:8089 -replication_port 9887 -secret your_key -auth admin:changeme
-          ./bin/splunk restart 
+          apt update && apt upgrade -y  && apt install nginx -y && apt install -y htop 
+          echo 'upstream backend {
+                  server splunk-sh:8000;
+          }
+          server {
+              listen 80;
+              server_name  ~^.*$;
+              location / {
+                  proxy_pass http://splunk-sh:8000;
+              }
+          }'> /etc/nginx/conf.d/proxy.conf
+          systemctl restart nginx 
+

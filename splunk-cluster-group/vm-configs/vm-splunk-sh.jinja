@@ -31,6 +31,3 @@ resources:
         sourceImage: https://www.googleapis.com/compute/v1/projects/gcp-lab-epam/global/images/splunk-sh
     networkInterfaces:
     - network: $(ref.{{ properties["network"] }}.selfLink)
-      accessConfigs:
-      - name: External NAT
-        type: ONE_TO_ONE_NAT

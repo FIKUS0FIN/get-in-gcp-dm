@@ -18,62 +18,29 @@ limitations under the License.
 {% set  SPLUNK_GROUP ="splunk-group" %}
 {% set  SPLUNK_ZONE ="europe-west3-b" %}
 {% set  SPLUNK_MachineType ="n1-standard-1" %}
+{% set  Splunk_temp = "splunk-peer-it"%}
+{% set  SPLUNK_SH ="splunk-sh" %}
 
 resources:
-- name: splunk-sh
+- name: {{ SPLUNK_SH }}
   type: vm-configs/vm-splunk-sh.jinja
   properties:
     machineType: {{ SPLUNK_MachineType }}
     zone: {{ SPLUNK_ZONE }}
     network: {{ NETWORK_NAME }}
-    
-{#- name: splunk-peer
-#  type: vm-configs/vm-splunk-peer.jinja
-#  properties:
-#    machineType: {{ SPLUNK_MachineType }}
-#    zone: {{ SPLUNK_ZONE }}
-#    network: {{ NETWORK_NAME }}
-#}
 
-- name: splunk-peer-it
+- name: {{ SPLUNK_SH }}-bastion
+  type: vm-configs/vm-splunk-bastion.jinja
   properties:
-    description: ''
-    properties:
-      disks:
-      - autoDelete: true
-        boot: true
-        deviceName: boot
-        initializeParams:
-          sourceImage: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-1604-xenial-v20180306
-        mode: READ_WRITE
-        type: PERSISTENT
-      machineType: {{ SPLUNK_MachineType }}
-      scheduling:
-        preemptible: true
-      metadata:
-        items:
-        - key: startup-script
-          value: |
-            #!/bin/bash
-            apt update && apt upgrade -y && apt install -y htop
-            wget -O splunk-7.0.2-03bbabbd5c0f-linux-2.6-amd64.deb 'https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=7.0.2&product=splunk&filename=splunk-7.0.2-03bbabbd5c0f-linux-2.6-amd64.deb&wget=true'
-            sudo dpkg -i splunk*.deb
-            cd /opt/splunk
-            ping -c 20 google.com 
-            sleep 60
-            ./bin/splunk start --accept-license
-            ./bin/splunk enable boot-start
-            ping -c 1 splunk-sh | grep "PING" | cut -d '(' -f 2 | awk '{print $1}' | cut -d ')' -f 1 > splunk-sh.ip
-            export IP=$(cat splunk-sh.ip)
-            echo "$(ref.splunk-sh.networkInterfaces[0].accessConfigs[0].natIP)"
-            ./bin/splunk edit cluster-config -mode slave -master_uri https://$IP:8089 -replication_port 9887 -secret your_key -auth admin:changeme
-            ./bin/splunk restart 
-      networkInterfaces:
-      - accessConfigs:
-        - name: external-nat
-          type: ONE_TO_ONE_NAT
-        network: https://www.googleapis.com/compute/v1/projects/{{env['project']}}/global/networks/{{ NETWORK_NAME }}
-  type: compute.v1.instanceTemplate
+    machineType: {{ SPLUNK_MachineType }}
+    zone: {{ SPLUNK_ZONE }}
+    network: {{ NETWORK_NAME }}
+
+- name: {{ Splunk_temp }}
+  type: vm-configs/splunk-templeate.jinja
+  properties:
+    network: {{ NETWORK_NAME }}
+    machineType: {{ SPLUNK_MachineType }}
 
 - name: {{ SPLUNK_GROUP }}
   type: compute.v1.instanceGroupManager

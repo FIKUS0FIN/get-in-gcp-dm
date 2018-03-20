@@ -14,7 +14,8 @@
 
 imports:
 - path: vm-configs/vm-splunk-sh.jinja
-- path: vm-configs/vm-splunk-peer.jinja
+- path: vm-configs/vm-splunk-bastion.jinja
+- path: vm-configs/splunk-templeate.jinja
 - path: network-configs/network-template.jinja
 - path: network-configs/firewall-template.jinja
 - path: vm-configs/compute-engine-template.jinja
