@@ -45,5 +45,8 @@ resources:
             ./bin/splunk edit cluster-config -mode slave -master_uri https://splunk-sh:8089 -replication_port 9887 -secret your_key -auth admin:changeme
             ./bin/splunk restart 
       networkInterfaces:
-        - network: $(ref.{{ properties["network"] }}.selfLink)
+      - accessConfigs:
+        - name: external-nat
+          type: ONE_TO_ONE_NAT
+        network: $(ref.{{ properties["network"] }}.selfLink)
   type: compute.v1.instanceTemplate
