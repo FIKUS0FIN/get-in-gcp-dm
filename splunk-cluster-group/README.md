@@ -1,6 +1,6 @@
 # Deployment Manager Templates for Splunk Cluster
 
-This repository contains Deployment Manager template for deploying Splunk Clustre. By default, this will     deploy the following topology:
+This repository contains Deployment Manager template for deploying Splunk Cluster. By default, this will     deploy the following topology:
 
 ![alt text](https://raw.githubusercontent.com/FIKUS0FIN/get-in-gcp-dm/master/splunk-cluster-group/Images/export.png)
 
