@@ -2,7 +2,7 @@
 
 This repository contains Deployment Manager template for deploying Splunk Clustre. By default, this will     deploy the following topology:
 
-![alt text](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png)
+![alt text](https://raw.githubusercontent.com/FIKUS0FIN/get-in-gcp-dm/master/splunk-cluster-group/Images/export.png)
 
 
 Splunk Cluster will have 4 preemptible peers in one Group,
