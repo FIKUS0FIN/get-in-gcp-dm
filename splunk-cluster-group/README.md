@@ -1,86 +1,20 @@
 # Deployment Manager Templates for Splunk Cluster
 
-This repository contains Deployment Manager template for deploying Splunk Cluster. By default, this will     deploy the following topology:
+This repository contains Deployment Manager template for deploying Splunk Cluster.
 
-![alt text](https://raw.githubusercontent.com/FIKUS0FIN/get-in-gcp-dm/master/splunk-cluster-group/Images/export.png)
-
-
-# Deployment Manager Templates structure
-.
-├── README.md
-├── splunk-cluster-deploy.yaml
-├── network-configs
-│   ├── firewall-template.jinja
-│   └── network-template.jinja
-└── vm-configs
-    ├── compute-engine-template.jinja
-    ├── splunk-templeate.jinja
-    ├── vm-splunk-bastion.jinja
-    └── vm-splunk-sh.jinja
-
-## splunk-cluster-deploy.yaml
-Main config file for Template creation 
-Contain:
-  - paths to jinja Templates
-  - path resources file whtere deffine infrastructure 
-
-## compute-engine-template.jinja
-Templeate file where we declaring the:
-
- - environment variables
- - resources names 
- - resources properties
- - types *in our case path to jinja templeta*
- 
-Contained hardcoded resources of instanceGroupManager with 
-
- - name 
- - baseInstanceName
- - instanceTemplate refer to $(ref.splunk-peer-it.selfLink)
- - targetSize 
- - zone
-
-
-## Networking 
-### network-template.jinja and irewall-template.jinja
-Template file for network and firewall rules creation 
-
-- reffer to compute-engine Template *{{ env["name"] }}* 
-
-### Vm-configs folder
-Containe the most important template's deffining whith resources will be created 
-#### splunk-templeate.jinja
-reffer to compute-engine Template with parameters of 
-
-- {{ env["name"] }}
-- {{ properties["machineType"] }}
-- sourceImage Image 
-- reffer to network selfLink  $(ref.{{ properties["network"] }}.selfLink)
-MEMO - very important reffering to network in instance templete becouse IT can be created befo network 
-it will couse error
-
-#### vm-splunk-sh.jinja
-Splunk Search Head Template containes:
-
-- reffer to compute-engine Template *{{ env["name"] }}* 
-- reffer of  {{ properties["zone"] }}
-- reffer of {{ properties["machineType"] }}
-- reffer network $(ref.{{ properties["network"] }}.selfLink)
-
-#### vm-splunk-bastion.jinja 
-Only one host with can communicate with Expernal network: 
- - Start_up script with installing Nginx-proxy 
- - Tags : http-server
- - dependsOn : splunk-sh and 
- - reffer network $(ref.{{ properties["network"] }}.selfLink)
- - reffer of  {{ properties["zone"] }}
- - reffer of {{ properties["machineType"] }}
-
-Splunk Cluster will have 4 preemptible peers in one Group,
-One Splunk Search Head creates form privat Splunk image,
-Teanpleate for splunk-peers group without Autoscaling 
-
-### Privat image start_up script 
+## Pre-requirements 
+1. install Cloud SDK: https://cloud.google.com/sdk/?hl=uk#Quick_Start 
+2. Set your project ID. 
+```
+gcloud config set project [myproject]
+```
+3. Set your default zone and region
+```
+gcloud config set compute/region europe-west3
+gcloud config set compute/zone europe-west3-b
+```
+4. Enable Deployment Manager: https://console.cloud.google.com/start/api?id=deploymentmanager&hl=uk
+5. Create instance splunk-sh with 40 GB on board and start_up script Feel free with other parameters 
 From public Ubuntu 16.04 LTS
 ```
 #!/bin/bash
@@ -93,3 +27,52 @@ cd /opt/splunk
 ./bin/splunk edit cluster-config -mode master -replication_factor 4 -search_factor 3 -secret your_key -cluster_label cluster1  -auth admin:changeme
 ./bin/splunk restart 
 ```
+5.1 Enable deletion protection : YES 
+5.2 Wait until start_up script finish his job 
+6. Kill the splunk-sh box 
+7. Create image form splunk-sh disk 
+7.1 Image name : splunk-sh 
+7.2 Source disk : splunk-sh 
+7.3 Feel free to add description and family
+8. clone the repository 
+9. Cretae deployments templates with gcloud 
+```
+cd step-by-step-dm/splunk-cluster-group
+gcloud deployment-manager deployments create splunk-cluster --config splunk-cluster-deploy.yaml
+# for deleting use that comand 
+gcloud deployment-manager deployments delete splunk-cluster
+# each time when u got fail u have to delete deployments first or use different name 
+```
+
+# Deployment Manager Templates structure
+![alt text](https://raw.githubusercontent.com/FIKUS0FIN/get-in-gcp-dm/master/splunk-cluster-group/Images/export.png)
+
+"
+.
+├── README.md
+├── splunk-cluster-deploy.yaml
+├── network-configs
+│   ├── firewall-template.jinja
+│   └── network-template.jinja
+└── vm-configs
+    ├── compute-engine-template.jinja
+    ├── splunk-templeate.jinja
+    ├── vm-splunk-bastion.jinja
+    └── vm-splunk-sh.jinja
+"
+## Networking 
+Templates location network-configs folder 
+Consist of VPC SourceRange " 10.0.0.1/24 " 
+FireWalls rules for 10.0.0.1/24 and 0.0.0.0/0 SourceRanges
+Internal rules : 10.0.0.1/24 - TCP:[ 80,22,8000-9999] UDP:514 and icmp
+External rules : 0.0.0.0/0 - TCP:[22,80,443]
+Down_reference external FireWall 80 and 443 will use only Bastion host 
+
+## Compute 
+Templates location vm-configs forlder 
+Consist templates ralated to InstanceGroup, InstanceTemplete and stand-alone mashines splunk-sh and Bastion
+in compute-engine-template.jinja file u can:
+change base configuration [names, properties],env variebles.
+InstanceTemplete it's refer for unmanaged InstanceGroup with TargetSize: 4
+Memo compute-engine-template containe hardcoded resource [ instanceGroupManager ].
+Memo_2 - very important reffering to network in instance templete becouse IT can be created befo network it will couse error.
