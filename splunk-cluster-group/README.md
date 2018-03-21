@@ -28,19 +28,19 @@ cd /opt/splunk
 ./bin/splunk restart 
 ```
 
-    5.1 Enable deletion protection : YES 
-
-    5.2 Wait until start_up script finish his job 
+   5.1 Enable deletion protection : YES 
+   
+   5.2 Wait until start_up script finish his job 
 
 6. Kill the splunk-sh box 
 7. Create image form splunk-sh disk 
 
-    7.1 Image name : splunk-sh 
-
-    7.2 Source disk : splunk-sh 
-
-    7.3 Feel free to add description and family
-
+   7.1 Image name : splunk-sh 
+   
+   7.2 Source disk : splunk-sh 
+   
+   7.3 Feel free to add description and family
+   
 8. clone the repository 
 9. Cretae deployments templates with gcloud 
 
