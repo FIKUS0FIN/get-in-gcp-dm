@@ -42,7 +42,7 @@ cd /opt/splunk
    7.3 Feel free to add description and family
    
 8. clone the repository 
-9. Cretae deployments templates with gcloud 
+9. Create deployments templates with gcloud 
 
 ```
 cd step-by-step-dm/splunk-cluster-group
@@ -55,6 +55,8 @@ gcloud deployment-manager deployments delete splunk-cluster
 # Deployment Manager Templates structure
 ![alt text](https://raw.githubusercontent.com/FIKUS0FIN/get-in-gcp-dm/master/splunk-cluster-group/Images/export.png)
 
+```
+bash
 .
 ├── README.md
 ├── splunk-cluster-deploy.yaml
@@ -66,6 +68,7 @@ gcloud deployment-manager deployments delete splunk-cluster
     ├── splunk-templeate.jinja
     ├── vm-splunk-bastion.jinja
     └── vm-splunk-sh.jinja
+```
 
 ## Networking 
 Templates location network-configs folder 
