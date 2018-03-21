@@ -27,15 +27,23 @@ cd /opt/splunk
 ./bin/splunk edit cluster-config -mode master -replication_factor 4 -search_factor 3 -secret your_key -cluster_label cluster1  -auth admin:changeme
 ./bin/splunk restart 
 ```
-5.1 Enable deletion protection : YES 
-5.2 Wait until start_up script finish his job 
+
+    5.1 Enable deletion protection : YES 
+
+    5.2 Wait until start_up script finish his job 
+
 6. Kill the splunk-sh box 
 7. Create image form splunk-sh disk 
-7.1 Image name : splunk-sh 
-7.2 Source disk : splunk-sh 
-7.3 Feel free to add description and family
+
+    7.1 Image name : splunk-sh 
+
+    7.2 Source disk : splunk-sh 
+
+    7.3 Feel free to add description and family
+
 8. clone the repository 
 9. Cretae deployments templates with gcloud 
+
 ```
 cd step-by-step-dm/splunk-cluster-group
 gcloud deployment-manager deployments create splunk-cluster --config splunk-cluster-deploy.yaml
@@ -47,7 +55,6 @@ gcloud deployment-manager deployments delete splunk-cluster
 # Deployment Manager Templates structure
 ![alt text](https://raw.githubusercontent.com/FIKUS0FIN/get-in-gcp-dm/master/splunk-cluster-group/Images/export.png)
 
-"
 .
 ├── README.md
 ├── splunk-cluster-deploy.yaml
@@ -59,20 +66,28 @@ gcloud deployment-manager deployments delete splunk-cluster
     ├── splunk-templeate.jinja
     ├── vm-splunk-bastion.jinja
     └── vm-splunk-sh.jinja
-"
+
 ## Networking 
 Templates location network-configs folder 
-Consist of VPC SourceRange " 10.0.0.1/24 " 
-FireWalls rules for 10.0.0.1/24 and 0.0.0.0/0 SourceRanges
-Internal rules : 10.0.0.1/24 - TCP:[ 80,22,8000-9999] UDP:514 and icmp
-External rules : 0.0.0.0/0 - TCP:[22,80,443]
+
+    Consist of VPC SourceRange " 10.0.0.1/24 " 
+    FireWalls rules for 10.0.0.1/24 and 0.0.0.0/0 SourceRanges
+    Internal rules : 10.0.0.1/24 - TCP:[ 80,22,8000-9999] UDP:514 and icmp
+    External rules : 0.0.0.0/0 - TCP:[22,80,443]
+    
 Down_reference external FireWall 80 and 443 will use only Bastion host 
 
 ## Compute 
 Templates location vm-configs forlder 
-Consist templates ralated to InstanceGroup, InstanceTemplete and stand-alone mashines splunk-sh and Bastion
-in compute-engine-template.jinja file u can:
-change base configuration [names, properties],env variebles.
-InstanceTemplete it's refer for unmanaged InstanceGroup with TargetSize: 4
+
+    Consist templates ralated to InstanceGroup, InstanceTemplete and stand-alone mashines splunk-sh and Bastion
+    in compute-engine-template.jinja file u can:
+    change base configuration [names, properties],env variebles.
+    InstanceTemplete it's refer for unmanaged InstanceGroup with TargetSize: 4
+    
 Memo compute-engine-template containe hardcoded resource [ instanceGroupManager ].
+
 Memo_2 - very important reffering to network in instance templete becouse IT can be created befo network it will couse error.
+
+
+
