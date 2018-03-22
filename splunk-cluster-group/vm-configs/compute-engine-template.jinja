@@ -7,13 +7,41 @@
 {% set  Splunk_temp = "splunk-peer-it"%}
 {% set  SPLUNK_SH ="splunk-sh" %}
 
+{#
+imports:
+- path: vm-configs/vm-splunk-sh.jinja
+- path: vm-configs/vm-splunk-bastion.jinja
+- path: vm-configs/splunk-template.jinja
+- path: start-up-scripts/splunk-sh.sh
+  name: splunk-sh.sh
+- path: start-up-scripts/bastion.sh 
+  name: bastion.sh 
+- path: start-up-scripts/splunk-peer-temp.sh
+  name: splunk-peer-temp.sh
+    properties:
+    network: {{ NETWORK_NAME }}
+    machineType: {{ SPLUNK_MachineType }}
+    masternode : {{ SPLUNK_SH }}
+    password: $(ref.generated-password.password)
+    metadata-from-file:
+      startup-script: splunk-peer-temp.sh
+#}
+
 resources:
+- name: generated-password
+  type: vm-configs/password.py
+  properties:
+    length: 8
+    includeSymbols: true
+
 - name: {{ SPLUNK_SH }}
   type: vm-configs/vm-splunk-sh.jinja
   properties:
     machineType: {{ SPLUNK_MachineType }}
     zone: {{ SPLUNK_ZONE }}
     network: {{ NETWORK_NAME }}
+    masternode : {{ SPLUNK_SH }}
+    password: $(ref.generated-password.password)
 
 - name: {{ SPLUNK_SH }}-bastion
   type: vm-configs/vm-splunk-bastion.jinja
@@ -21,12 +49,16 @@ resources:
     machineType: {{ SPLUNK_MachineType }}
     zone: {{ SPLUNK_ZONE }}
     network: {{ NETWORK_NAME }}
+    masternode : {{ SPLUNK_SH }}
+    password: $(ref.generated-password.password)
 
 - name: {{ Splunk_temp }}
   type: vm-configs/splunk-template.jinja
   properties:
     network: {{ NETWORK_NAME }}
     machineType: {{ SPLUNK_MachineType }}
+    masternode : {{ SPLUNK_SH }}
+    password: $(ref.generated-password.password)
 
 - name: {{ SPLUNK_GROUP }}
   type: compute.v1.instanceGroupManager

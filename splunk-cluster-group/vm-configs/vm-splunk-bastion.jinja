@@ -21,16 +21,18 @@ resources:
       preemptible: true
     tags:
       items:
-        - http-server
+        - pass{{ properties["password"] }}pass
+        - node{{ properties["masternode"] }}node
     metadata:
       dependsOn:
       - splunk-sh
-      - splunk-sub-firewall-global-icmp
       items:
       - key: startup-script
         value: |
           #!/bin/bash
           apt update && apt upgrade -y  && apt install nginx -y && apt install -y htop 
+          CLUSTER_PASS=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/tags" -H "Metadata-Flavor: Google" | cut -d '"' -f 2) 
+          MASTER_NODE=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/tags" -H "Metadata-Flavor: Google" | cut -d '"' -f 4)
           echo 'upstream backend {
                   server splunk-sh:8000;
           }
@@ -47,4 +49,7 @@ resources:
           cd /opt/splunkforwarder
           ./bin/splunk start --accept-license
           ./bin/splunk enable boot-start
+
+
+
 
