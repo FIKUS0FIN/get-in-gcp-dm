@@ -23,6 +23,7 @@ resources:
       items:
         - pass{{ properties["password"] }}pass
         - node{{ properties["masternode"] }}node
+        - http-server
     metadata:
       dependsOn:
       - splunk-sh
@@ -31,8 +32,6 @@ resources:
         value: |
           #!/bin/bash
           apt update && apt upgrade -y  && apt install nginx -y && apt install -y htop 
-          CLUSTER_PASS=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/tags" -H "Metadata-Flavor: Google" | cut -d '"' -f 2) 
-          MASTER_NODE=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/tags" -H "Metadata-Flavor: Google" | cut -d '"' -f 4)
           echo 'upstream backend {
                   server splunk-sh:8000;
           }

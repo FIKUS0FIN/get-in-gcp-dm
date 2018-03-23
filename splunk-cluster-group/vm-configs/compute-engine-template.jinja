@@ -50,7 +50,6 @@ resources:
     zone: {{ SPLUNK_ZONE }}
     network: {{ NETWORK_NAME }}
     masternode : {{ SPLUNK_SH }}
-    password: $(ref.generated-password.password)
 
 - name: {{ Splunk_temp }}
   type: vm-configs/splunk-template.jinja
