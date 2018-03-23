@@ -1,0 +1,8 @@
+resources:
+- name: {{ env["name"] }}
+  type: compute.v1.autoscaler
+  properties:
+    zone: {{ properties["zone"] }}
+    target: {{ properties["target"] }}
+    autoscalingPolicy:
+      maxNumReplicas: {{ properties["maxSize"] }}

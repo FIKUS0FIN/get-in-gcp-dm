@@ -1,7 +1,11 @@
-
+{#
+var defining part
+==========================================================
+#}
 {% set  NETWORK_NAME = "splunk-sub" %}
 {% set  INSTANCE_NAME ="splunk" %}
 {% set  SPLUNK_GROUP ="splunk-group" %}
+{% set  SPLUNK_BASE_NAME ="splunk-peer" %}
 {% set  SPLUNK_ZONE ="europe-west3-b" %}
 {% set  SPLUNK_MachineType ="n1-standard-1" %}
 {% set  Splunk_temp = "splunk-peer-it"%}
@@ -27,6 +31,10 @@ imports:
       startup-script: splunk-peer-temp.sh
 #}
 
+{#
+generator config
+==========================================================
+#}
 resources:
 - name: generated-password
   type: vm-configs/password.py
@@ -34,6 +42,10 @@ resources:
     length: 8
     includeSymbols: true
 
+{#
+Splunk Search head creation 
+==========================================================
+#}
 - name: {{ SPLUNK_SH }}
   type: vm-configs/vm-splunk-sh.jinja
   properties:
@@ -43,6 +55,10 @@ resources:
     masternode : {{ SPLUNK_SH }}
     password: $(ref.generated-password.password)
 
+{#
+Bastion Proxy pass creation 
+==========================================================
+#}
 - name: {{ SPLUNK_SH }}-bastion
   type: vm-configs/vm-splunk-bastion.jinja
   properties:
@@ -51,6 +67,10 @@ resources:
     network: {{ NETWORK_NAME }}
     masternode : {{ SPLUNK_SH }}
 
+{#
+Teamplate for group creation 
+==========================================================
+#}
 - name: {{ Splunk_temp }}
   type: vm-configs/splunk-template.jinja
   properties:
@@ -59,14 +79,33 @@ resources:
     masternode : {{ SPLUNK_SH }}
     password: $(ref.generated-password.password)
 
+{#
+Group creation with zise and template link
+==========================================================
+#}
 - name: {{ SPLUNK_GROUP }}
-  type: compute.v1.instanceGroupManager
+  type: vm-configs/autoscaled_group.jinja
+  properties:
+    zone : {{ SPLUNK_ZONE }}
+    size : 4
+    baseInstanceName : {{ SPLUNK_BASE_NAME }}
+    instanceTemplate : $(ref.{{ Splunk_temp }}.selfLink)
+
+{#
+Autoscaler group creation with max size
+==========================================================
+#}
+- name: {{ SPLUNK_BASE_NAME }}-as
+  type: vm-configs/autoscaler.jinja
   properties:
     zone: {{ SPLUNK_ZONE }}
-    targetSize: 4
-    baseInstanceName: splunk-peer
-    instanceTemplate: $(ref.splunk-peer-it.selfLink)
+    target: $(ref.{{ SPLUNK_GROUP }}.selfLink)
+    maxSize: 4
 
+{#
+Networking part
+==========================================================
+#}
 - name: {{ NETWORK_NAME }}
   type: network-configs/network-template.jinja
 
