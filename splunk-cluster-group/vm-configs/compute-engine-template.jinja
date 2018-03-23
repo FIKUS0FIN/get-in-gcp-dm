@@ -10,6 +10,7 @@ var defining part
 {% set  SPLUNK_MachineType ="n1-standard-1" %}
 {% set  Splunk_temp = "splunk-peer-it"%}
 {% set  SPLUNK_SH ="splunk-sh" %}
+{% set  BASE_IMAGE ="https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-1604-xenial-v20180306" %}
 
 {#
 imports:
@@ -52,6 +53,7 @@ Splunk Search head creation
     machineType: {{ SPLUNK_MachineType }}
     zone: {{ SPLUNK_ZONE }}
     network: {{ NETWORK_NAME }}
+    image : {{ BASE_IMAGE }}
     masternode : {{ SPLUNK_SH }}
     password: $(ref.generated-password.password)
 
@@ -66,6 +68,7 @@ Bastion Proxy pass creation
     zone: {{ SPLUNK_ZONE }}
     network: {{ NETWORK_NAME }}
     masternode : {{ SPLUNK_SH }}
+    image : {{ BASE_IMAGE }}
 
 {#
 Teamplate for group creation 
@@ -77,6 +80,7 @@ Teamplate for group creation
     network: {{ NETWORK_NAME }}
     machineType: {{ SPLUNK_MachineType }}
     masternode : {{ SPLUNK_SH }}
+    image : {{ BASE_IMAGE }}
     password: $(ref.generated-password.password)
 
 {#

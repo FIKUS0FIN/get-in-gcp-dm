@@ -8,7 +8,7 @@ resources:
         boot: true
         deviceName: boot
         initializeParams:
-          sourceImage: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-1604-xenial-v20180306
+          sourceImage: {{ properties["image"] }}
         mode: READ_WRITE
         type: PERSISTENT
       machineType: {{ properties["machineType"] }}

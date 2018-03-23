@@ -29,38 +29,9 @@ gcloud config set compute/zone europe-west3-b
 https://console.cloud.google.com/start/api?id=deploymentmanager&hl=uk
 ```
 
-5. Create instance splunk-sh with 40 GB on board and start_up script Feel free with other parameters.
+5. Clone the repository 
 
-From public Ubuntu 16.04 LTS
-
-```bash
-#!/bin/bash
-apt update && apt upgrade -y && apt install -y htop
-wget -O splunk-7.0.2-03bbabbd5c0f-linux-2.6-amd64.deb 'https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=7.0.2&product=splunk&filename=splunk-7.0.2-03bbabbd5c0f-linux-2.6-amd64.deb&wget=true'
-sudo dpkg -i splunk*.deb
-cd /opt/splunk
-./bin/splunk start --accept-license
-./bin/splunk enable boot-start
-./bin/splunk edit cluster-config -mode master -replication_factor 4 -search_factor 3 -secret your_key -cluster_label cluster1  -auth admin:changeme
-./bin/splunk restart 
-```
-
-    5.1 Enable deletion protection : YES
-
-    5.2 Wait until start_up script finish his job
-
-6. Kill the splunk-sh box
-
-7. Create image form splunk-sh disk
-
-    7.1 Image name : splunk-sh
-
-    7.2 Source disk : splunk-sh
-
-    7.3 Feel free to add description and family
-
-8. Clone the repository 
-9. Cretae deployments templates with gcloud
+6. Cretae deployments templates with gcloud
 
 ```bash
 cd step-by-step-dm/splunk-cluster-group
@@ -101,12 +72,7 @@ Down_reference external FireWall 80 and 443 will use only Bastion host
 Templates location vm-configs forlder 
 
 ```bash
-Consist templates ralated to InstanceGroup, InstanceTemplete and stand-alone mashines splunk-sh and Bastion
-in compute-engine-template.jinja file u can:
-change base configuration [names, properties],env variebles.
-InstanceTemplete it's refer for unmanaged InstanceGroup with TargetSize: 4
+Consist of templates ralated to InstanceGroup,InstanceAutoscaler,InstanceTemplete, Splunk-sh mashines,Base_Image,Bastion-proxy-pass...
 ```
 
-Memo compute-engine-template containe hardcoded resource [ instanceGroupManager ].
-
-Memo_2 - very important reffering to network in instance templete becouse IT can be created befo network it will couse error.
+Memo - very important reffering to network in instance templete becouse IT can be created befo network it will couse error.
