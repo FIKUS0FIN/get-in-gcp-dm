@@ -2,6 +2,7 @@
 
 This repository contains Deployment Manager template for deploying Splunk Cluster.
 
+![alt text](https://raw.githubusercontent.com/FIKUS0FIN/get-in-gcp-dm/master/splunk-cluster-group/Images/image_gif_.gif)
 ## Pre-requirements
 
 1. Install Cloud SDK:
@@ -75,4 +76,4 @@ Templates location vm-configs forlder
 Consist of templates ralated to InstanceGroup,InstanceAutoscaler,InstanceTemplete, Splunk-sh mashines,Base_Image,Bastion-proxy-pass...
 ```
 
-Memo - very important reffering to network in instance templete becouse IT can be created befo network it will couse error.
+Memo - very important referring to network in instance template because IT can be created befo network it will couse error.

@@ -77,4 +77,4 @@ Templates location vm-configs forlder.
 Consist of templates ralated to InstanceGroup,InstanceAutoscaler,InstanceTemplete, Splunk-sh mashines,Base_Image,Bastion-proxy-pass...
 ```
 
-Memo - very important reffering to network in instance templete becouse IT can be created befo network it will couse error.
+Memo - very important referring to network in instance template because IT can be created befo network it will couse error.
