@@ -10,7 +10,8 @@ var defining part
 {% set  SPLUNK_MachineType ="n1-standard-1" %}
 {% set  Splunk_temp = "splunk-peer-it"%}
 {% set  SPLUNK_SH ="splunk-sh" %}
-{% set  BASE_IMAGE ="https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-1604-xenial-v20180306" %}
+{% set  CLUSTER_SIZE ="4" %}
+{% set  BASE_IMAGE ="https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/family/ubuntu-1604-lts" %}
 
 {#
 imports:
@@ -91,7 +92,7 @@ Group creation with zise and template link
   type: vm-configs/autoscaled_group.jinja
   properties:
     zone : {{ SPLUNK_ZONE }}
-    size : 4
+    size : {{ CLUSTER_SIZE }}
     baseInstanceName : {{ SPLUNK_BASE_NAME }}
     instanceTemplate : $(ref.{{ Splunk_temp }}.selfLink)
 
@@ -104,7 +105,8 @@ Autoscaler group creation with max size
   properties:
     zone: {{ SPLUNK_ZONE }}
     target: $(ref.{{ SPLUNK_GROUP }}.selfLink)
-    maxSize: 4
+    minSize : {{ CLUSTER_SIZE }}
+    maxSize : {{ CLUSTER_SIZE }}
 
 {#
 Networking part
