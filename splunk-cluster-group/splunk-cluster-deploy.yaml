@@ -14,8 +14,6 @@ imports:
   name: splunk-peer-temp
 - path: start-up-scripts/splunk-sh.sh
   name: splunk-sh
-- path: start-up-scripts/test.sh
-  name: test
 
 resources:
 - name: compute-engine-setup
