@@ -1,6 +1,6 @@
 #!/bin/bash
 apt update && apt upgrade -y && apt install -y htop 
-wget -O splunk-7.0.2-03bbabbd5c0f-linux-2.6-amd64.deb "https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=7.0.2&product=splunk&filename=splunk-7.0.2-03bbabbd5c0f-linux-2.6-amd64.deb&wget=true"
+DOWNLOAD_LINK
 sudo dpkg -i splunk*.deb
 cd /opt/splunk
 sleep 60s

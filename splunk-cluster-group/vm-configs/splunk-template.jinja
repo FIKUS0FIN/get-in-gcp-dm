@@ -24,7 +24,7 @@ resources:
         items:
         - key: startup-script
           value: | 
-            {{ imports["splunk-peer-temp"]|indent(12)|replace("MASTERNODE",properties["masternode"])|replace("PASSWORD",properties["password"])}}
+            {{ imports["splunk-peer-temp"]|indent(12)|replace("MASTERNODE",properties["masternode"])|replace("PASSWORD",properties["password"])|replace("DOWNLOAD_LINK",properties["download-link"])}}
       networkInterfaces:
       - accessConfigs:
         - name: external-nat

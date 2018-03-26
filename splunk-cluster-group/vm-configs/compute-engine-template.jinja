@@ -12,7 +12,7 @@ var defining part
 {% set  SPLUNK_SH ="splunk-sh" %}
 {% set  CLUSTER_SIZE ="4" %}
 {% set  BASE_IMAGE ="https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/family/ubuntu-1604-lts" %}
-{% set  SPLUNK_BAK_IMG ="mount-point-100/splunk-7.0.2.deb" %}
+{% set  DOWNLOAD_LINK ="wget -O splunk-7.0.3-fa31da744b51-linux-2.6-amd64.deb 'https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=7.0.3&product=splunk&filename=splunk-7.0.3-fa31da744b51-linux-2.6-amd64.deb&wget=true'" %}
 
 {#
 generator config
@@ -38,7 +38,7 @@ Splunk Search head creation
     image: {{ BASE_IMAGE }}
     masternode: {{ SPLUNK_SH }}
     password: $(ref.generated-password.password) 
-    splunk-image: {{ SPLUNK_BAK_IMG }}
+    download-link: {{ DOWNLOAD_LINK }}
 
 {#
 Bastion Proxy pass creation 
@@ -53,7 +53,7 @@ Bastion Proxy pass creation
     masternode: {{ SPLUNK_SH }}
     masternode-ip: $(ref.{{ SPLUNK_SH }}.networkInterfaces[0].natIp)
     image: {{ BASE_IMAGE }}
-    splunk-image: {{ SPLUNK_BAK_IMG }}
+    download-link: {{ DOWNLOAD_LINK }}
 {#
 Teamplate for group creation 
 ==========================================================
@@ -67,7 +67,7 @@ Teamplate for group creation
     image: {{ BASE_IMAGE }}
     masternode-ip: $(ref.{{ SPLUNK_SH }}.networkInterfaces[0].natIp)
     password: $(ref.generated-password.password)
-    splunk-image: {{ SPLUNK_BAK_IMG }}
+    download-link: {{ DOWNLOAD_LINK }}
       
 {#
 Group creation with zise and template link

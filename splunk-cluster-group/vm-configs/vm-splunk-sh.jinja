@@ -24,4 +24,4 @@ resources:
       items:
       - key: startup-script
         value: | 
-          {{ imports["splunk-sh"]|indent(12)|replace("PASSWORD",properties["password"])}}
+          {{ imports["splunk-sh"]|indent(12)|replace("PASSWORD",properties["password"])|replace("DOWNLOAD_LINK",properties["download-link"])}}
