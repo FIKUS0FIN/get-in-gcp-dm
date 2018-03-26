@@ -36,7 +36,7 @@ https://console.cloud.google.com/start/api?id=deploymentmanager&hl=uk
 6.Cretae deployments templates with gcloud
 
 ```bash
-cd step-by-step-dm/splunk-cluster-group
+cd get-in-gcp-dm/splunk-cluster-group
 gcloud deployment-manager deployments create splunk-cluster --config splunk-cluster-deploy.yaml
 # for deleting use that comand 
 gcloud deployment-manager deployments delete splunk-cluster

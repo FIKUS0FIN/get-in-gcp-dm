@@ -37,6 +37,7 @@ Splunk Search head creation
     network: {{ NETWORK_NAME }}
     image: {{ BASE_IMAGE }}
     masternode: {{ SPLUNK_SH }}
+    masternode-ip: $(ref.{{ SPLUNK_SH }}.networkInterfaces[0].natIp)
     password: $(ref.generated-password.password) 
     splunk-image: {{ SPLUNK_BAK_IMG }}
 
