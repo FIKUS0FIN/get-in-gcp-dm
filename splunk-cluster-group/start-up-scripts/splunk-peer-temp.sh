@@ -5,5 +5,5 @@ sudo dpkg -i splunk*.deb
 cd /opt/splunk
 ./bin/splunk start --accept-license
 ./bin/splunk enable boot-start 
-./bin/splunk edit cluster-config -mode slave -master_uri https://{{ properties["masternode"] }}:8089 -replication_port 9887 -secret {{ properties["password"] }} -auth admin:changeme
+./bin/splunk edit cluster-config -mode slave -master_uri https://MASTERNODE:8089 -replication_port 9887 -secret PASSWORD -auth admin:changeme
 ./bin/splunk restart 

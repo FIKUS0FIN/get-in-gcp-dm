@@ -22,8 +22,6 @@ resources:
           - pass{{ properties["password"] }}pass
           - node{{ properties["masternode"] }}node
       items:
-      {% for key, value in properties['metadata-from-file'].iteritems() %}
-      - key: {{ key }}
-        value: |
-          "{{ imports[value]|indent(10) }}"
-    {% endfor %}
+      - key: startup-script
+        value: | 
+          {{ imports["splunk-sh"]|indent(12)|replace("PASSWORD",properties["password"])}}

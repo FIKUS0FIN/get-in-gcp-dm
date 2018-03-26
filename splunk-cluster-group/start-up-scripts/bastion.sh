@@ -1,15 +1,13 @@
 #!/bin/bash
 apt update && apt upgrade -y  && apt install nginx -y && apt install -y htop 
-CLUSTER_PASS=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/tags" -H "Metadata-Flavor: Google" | cut -d '"' -f 2) 
-MASTER_NODE=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/tags" -H "Metadata-Flavor: Google" | cut -d '"' -f 4)
 echo 'upstream backend {
-        server splunk-sh:8000;
+        server 'MASTERNODE':8000;
 }
 server {
     listen 80;
     server_name  ~^.*$;
     location / {
-        proxy_pass http://splunk-sh:8000;
+        proxy_pass http://'MASTERNODE':8000;
     }
 }'> /etc/nginx/conf.d/proxy.conf
 systemctl restart nginx 

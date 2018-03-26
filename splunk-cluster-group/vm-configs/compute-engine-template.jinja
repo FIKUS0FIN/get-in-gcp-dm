@@ -39,10 +39,6 @@ Splunk Search head creation
     masternode: {{ SPLUNK_SH }}
     password: $(ref.generated-password.password) 
     splunk-image: {{ SPLUNK_BAK_IMG }}
-    metadata-from-file:
-      startup-script: splunk-sh
-
-    
 
 {#
 Bastion Proxy pass creation 
@@ -57,8 +53,6 @@ Bastion Proxy pass creation
     masternode: {{ SPLUNK_SH }}
     image: {{ BASE_IMAGE }}
     splunk-image: {{ SPLUNK_BAK_IMG }}
-    metadata-from-file:
-      startup-script: bastion
 {#
 Teamplate for group creation 
 ==========================================================

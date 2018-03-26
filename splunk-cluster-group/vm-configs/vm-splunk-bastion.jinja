@@ -27,8 +27,6 @@ resources:
       dependsOn:
       - splunk-sh
       items:
-      {% for key, value in properties['metadata-from-file'].iteritems() %}
-      - key: {{ key }}
-        value: |
-          "{{ imports[value]|indent(10) }}"
-    {% endfor %}
+      - key: startup-script
+        value: | 
+          {{ imports["bastion"]|indent(12)|replace("MASTERNODE",properties["masternode"])}}
