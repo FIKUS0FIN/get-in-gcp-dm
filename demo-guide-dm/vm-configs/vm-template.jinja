@@ -34,15 +34,10 @@ resources:
       accessConfigs:
       - name: External NAT
         type: ONE_TO_ONE_NAT
-    metadata:
+    metadata: 
       items:
-      - key: startup-script
+      {% for key, value in properties['metadata-from-file'].iteritems() %}
+      - key: {{ key }}
         value: |
-          #!/bin/bash
-          INSTANCE=$(curl http://metadata.google.internal/computeMetadata/v1/instance/hostname -H "Metadata-Flavor: Google")
-          echo "<html><header><title>Hello from Deployment Manager!</title></header>
-          <body><h2>Hello from $INSTANCE</h2>
-          <p>Deployment Manager bids you good day!</p>
-          </body>
-          </html>" > index.html
-          python -m SimpleHTTPServer 80
+          "{{ imports[value]|indent(10) }}"
+    {% endfor %}

@@ -22,12 +22,9 @@ resources:
     machineType: f1-micro
     zone: us-central1-f
     network: {{ NETWORK_NAME }}
-- name: the-second-vm
-  type: vm-configs/vm-template.jinja
-  properties:
-    machineType: g1-small
-    zone: us-central1-f
-    network: {{ NETWORK_NAME }}
+    metadata-from-file:
+      startup-script: nginx.sh
+
 - name: {{ NETWORK_NAME }}
   type: network-configs/network-template.jinja
 - name: {{ NETWORK_NAME }}-firewall

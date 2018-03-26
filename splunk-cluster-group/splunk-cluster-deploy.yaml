@@ -8,6 +8,14 @@ imports:
 - path: vm-configs/autoscaled_group.jinja
 - path: vm-configs/autoscaler.jinja
 - path: vm-configs/password.py
+- path: start-up-scripts/bastion.sh
+  name: bastion
+- path: start-up-scripts/splunk-peer-temp.sh
+  name: splunk-peer-temp
+- path: start-up-scripts/splunk-sh.sh
+  name: splunk-sh
+- path: start-up-scripts/test.sh
+  name: test
 
 resources:
 - name: compute-engine-setup

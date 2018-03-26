@@ -12,26 +12,7 @@ var defining part
 {% set  SPLUNK_SH ="splunk-sh" %}
 {% set  CLUSTER_SIZE ="4" %}
 {% set  BASE_IMAGE ="https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/family/ubuntu-1604-lts" %}
-
-{#
-imports:
-- path: vm-configs/vm-splunk-sh.jinja
-- path: vm-configs/vm-splunk-bastion.jinja
-- path: vm-configs/splunk-template.jinja
-- path: start-up-scripts/splunk-sh.sh
-  name: splunk-sh.sh
-- path: start-up-scripts/bastion.sh 
-  name: bastion.sh 
-- path: start-up-scripts/splunk-peer-temp.sh
-  name: splunk-peer-temp.sh
-    properties:
-    network: {{ NETWORK_NAME }}
-    machineType: {{ SPLUNK_MachineType }}
-    masternode : {{ SPLUNK_SH }}
-    password: $(ref.generated-password.password)
-    metadata-from-file:
-      startup-script: splunk-peer-temp.sh
-#}
+{% set  SPLUNK_BAK_IMG ="mount-point-100/splunk-7.0.2.deb" %}
 
 {#
 generator config
@@ -54,9 +35,14 @@ Splunk Search head creation
     machineType: {{ SPLUNK_MachineType }}
     zone: {{ SPLUNK_ZONE }}
     network: {{ NETWORK_NAME }}
-    image : {{ BASE_IMAGE }}
-    masternode : {{ SPLUNK_SH }}
-    password: $(ref.generated-password.password)
+    image: {{ BASE_IMAGE }}
+    masternode: {{ SPLUNK_SH }}
+    password: $(ref.generated-password.password) 
+    splunk-image: {{ SPLUNK_BAK_IMG }}
+    metadata-from-file:
+      startup-script: splunk-sh
+
+    
 
 {#
 Bastion Proxy pass creation 
@@ -68,9 +54,11 @@ Bastion Proxy pass creation
     machineType: {{ SPLUNK_MachineType }}
     zone: {{ SPLUNK_ZONE }}
     network: {{ NETWORK_NAME }}
-    masternode : {{ SPLUNK_SH }}
-    image : {{ BASE_IMAGE }}
-
+    masternode: {{ SPLUNK_SH }}
+    image: {{ BASE_IMAGE }}
+    splunk-image: {{ SPLUNK_BAK_IMG }}
+    metadata-from-file:
+      startup-script: bastion
 {#
 Teamplate for group creation 
 ==========================================================
@@ -80,10 +68,11 @@ Teamplate for group creation
   properties:
     network: {{ NETWORK_NAME }}
     machineType: {{ SPLUNK_MachineType }}
-    masternode : {{ SPLUNK_SH }}
-    image : {{ BASE_IMAGE }}
+    masternode: {{ SPLUNK_SH }}
+    image: {{ BASE_IMAGE }}
     password: $(ref.generated-password.password)
-
+    splunk-image: {{ SPLUNK_BAK_IMG }}
+      
 {#
 Group creation with zise and template link
 ==========================================================
@@ -91,10 +80,10 @@ Group creation with zise and template link
 - name: {{ SPLUNK_GROUP }}
   type: vm-configs/autoscaled_group.jinja
   properties:
-    zone : {{ SPLUNK_ZONE }}
-    size : {{ CLUSTER_SIZE }}
-    baseInstanceName : {{ SPLUNK_BASE_NAME }}
-    instanceTemplate : $(ref.{{ Splunk_temp }}.selfLink)
+    zone: {{ SPLUNK_ZONE }}
+    size: {{ CLUSTER_SIZE }}
+    baseInstanceName: {{ SPLUNK_BASE_NAME }}
+    instanceTemplate: $(ref.{{ Splunk_temp }}.selfLink)
 
 {#
 Autoscaler group creation with max size
@@ -105,8 +94,8 @@ Autoscaler group creation with max size
   properties:
     zone: {{ SPLUNK_ZONE }}
     target: $(ref.{{ SPLUNK_GROUP }}.selfLink)
-    minSize : {{ CLUSTER_SIZE }}
-    maxSize : {{ CLUSTER_SIZE }}
+    minSize: {{ CLUSTER_SIZE }}
+    maxSize: {{ CLUSTER_SIZE }}
 
 {#
 Networking part

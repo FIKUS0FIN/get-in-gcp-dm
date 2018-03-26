@@ -17,6 +17,9 @@ imports:
 - path: network-configs/network-template.jinja
 - path: network-configs/firewall-template.jinja
 - path: vm-configs/compute-engine-template.jinja
+- path: scripts/nginx.sh
+  name: nginx.sh
+
 
 resources:
 - name: compute-engine-setup
