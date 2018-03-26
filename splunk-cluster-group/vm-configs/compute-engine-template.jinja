@@ -37,7 +37,6 @@ Splunk Search head creation
     network: {{ NETWORK_NAME }}
     image: {{ BASE_IMAGE }}
     masternode: {{ SPLUNK_SH }}
-    masternode-ip: $(ref.{{ SPLUNK_SH }}.networkInterfaces[0].natIp)
     password: $(ref.generated-password.password) 
     splunk-image: {{ SPLUNK_BAK_IMG }}
 
@@ -52,6 +51,7 @@ Bastion Proxy pass creation
     zone: {{ SPLUNK_ZONE }}
     network: {{ NETWORK_NAME }}
     masternode: {{ SPLUNK_SH }}
+    masternode-ip: $(ref.{{ SPLUNK_SH }}.networkInterfaces[0].natIp)
     image: {{ BASE_IMAGE }}
     splunk-image: {{ SPLUNK_BAK_IMG }}
 {#
@@ -65,6 +65,7 @@ Teamplate for group creation
     machineType: {{ SPLUNK_MachineType }}
     masternode: {{ SPLUNK_SH }}
     image: {{ BASE_IMAGE }}
+    masternode-ip: $(ref.{{ SPLUNK_SH }}.networkInterfaces[0].natIp)
     password: $(ref.generated-password.password)
     splunk-image: {{ SPLUNK_BAK_IMG }}
       
