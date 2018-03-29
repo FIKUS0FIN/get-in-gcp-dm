@@ -25,3 +25,7 @@ resources:
       - key: startup-script
         value: | 
           {{ imports["splunk-sh"]|indent(12)|replace("PASSWORD",properties["password"])|replace("DOWNLOAD_LINK",properties["download-link"])}}
+    serviceAccounts:
+    - email: $(ref.{{ properties['serviceAccountId'] }}.email)
+      scopes:
+      - "https://www.googleapis.com/auth/cloud-platform"

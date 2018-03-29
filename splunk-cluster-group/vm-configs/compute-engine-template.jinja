@@ -13,6 +13,7 @@ var defining part
 {% set  CLUSTER_SIZE ="4" %}
 {% set  BASE_IMAGE ="https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/family/ubuntu-1604-lts" %}
 {% set  DOWNLOAD_LINK ="wget -O splunk-7.0.3-fa31da744b51-linux-2.6-amd64.deb 'https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=7.0.3&product=splunk&filename=splunk-7.0.3-fa31da744b51-linux-2.6-amd64.deb&wget=true'" %}
+{% set  SERVICE_AC ="splunk-service-account" %}
 
 {#
 generator config
@@ -39,6 +40,7 @@ Splunk Search head creation
     masternode: {{ SPLUNK_SH }}
     password: $(ref.generated-password.password) 
     download-link: {{ DOWNLOAD_LINK }}
+    serviceAccountId: {{ SERVICE_AC }}
 
 {#
 Bastion Proxy pass creation 
@@ -54,6 +56,7 @@ Bastion Proxy pass creation
     masternode-ip: $(ref.{{ SPLUNK_SH }}.networkInterfaces[0].natIp)
     image: {{ BASE_IMAGE }}
     download-link: {{ DOWNLOAD_LINK }}
+    serviceAccountId: {{ SERVICE_AC }}
 {#
 Teamplate for group creation 
 ==========================================================
@@ -68,6 +71,7 @@ Teamplate for group creation
     masternode-ip: $(ref.{{ SPLUNK_SH }}.networkInterfaces[0].natIp)
     password: $(ref.generated-password.password)
     download-link: {{ DOWNLOAD_LINK }}
+    serviceAccountId: {{ SERVICE_AC }}
       
 {#
 Group creation with zise and template link
@@ -92,6 +96,13 @@ Autoscaler group creation with max size
     target: $(ref.{{ SPLUNK_GROUP }}.selfLink)
     minSize: {{ CLUSTER_SIZE }}
     maxSize: {{ CLUSTER_SIZE }}
+
+{#
+Service Account
+==========================================================
+#}
+- name: {{ SERVICE_AC }}
+  type: vm-configs/service_account.jinja
 
 {#
 Networking part

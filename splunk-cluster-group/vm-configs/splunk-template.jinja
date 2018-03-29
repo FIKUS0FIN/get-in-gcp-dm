@@ -30,4 +30,8 @@ resources:
         - name: external-nat
           type: ONE_TO_ONE_NAT
         network: $(ref.{{ properties["network"] }}.selfLink)
+      serviceAccounts:
+      - email: $(ref.{{ properties['serviceAccountId'] }}.email)
+        scopes:
+        - "https://www.googleapis.com/auth/cloud-platform"
   type: compute.v1.instanceTemplate

@@ -30,3 +30,7 @@ resources:
       - key: startup-script
         value: | 
           {{ imports["bastion"]|indent(12)|replace("MASTERNODE",properties["masternode"])}}
+    serviceAccounts:
+    - email: $(ref.{{ properties['serviceAccountId'] }}.email)
+      scopes:
+      - "https://www.googleapis.com/auth/cloud-platform"

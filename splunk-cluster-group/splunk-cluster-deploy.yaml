@@ -8,6 +8,7 @@ imports:
 - path: vm-configs/autoscaled_group.jinja
 - path: vm-configs/autoscaler.jinja
 - path: vm-configs/password.py
+- path: vm-configs/service_account.jinja
 - path: start-up-scripts/bastion.sh
   name: bastion
 - path: start-up-scripts/splunk-peer-temp.sh
