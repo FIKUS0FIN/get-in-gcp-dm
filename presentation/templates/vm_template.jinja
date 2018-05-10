@@ -1,0 +1,18 @@
+resources:
+- type: compute.v1.instance
+  name: {{ env["name"] }}
+  properties:
+    zone: {{ properties["zone"] }}
+    machineType: https://www.googleapis.com/compute/v1/projects/{{ env["project"] }}/zones/{{ properties["zone"] }}/machineTypes/f1-micro
+    metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          python -m SimpleHTTPServer 8080
+
+    networkInterfaces:
+    - network: https://www.googleapis.com/compute/v1/projects/{{ env["project"] }}/global/networks/default
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT

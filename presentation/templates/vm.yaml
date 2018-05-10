@@ -1,0 +1,13 @@
+imports:
+- path: vm_template.jinja
+
+resources:
+- name: vm-first
+  type: vm_template.jinja
+  properties:
+    zone: eu-central-1
+
+- name: vm-secound 
+  type: vm_template.jinja
+  properties:
+    zone: eu-central-2

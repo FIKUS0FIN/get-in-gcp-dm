@@ -1,0 +1,30 @@
+
+imports:
+- path: vm-template.jinja
+
+resources:
+- name:  vm-1
+  type: vm-template.jinja
+  properties:
+    machineType: n1-standard-1
+    zone: europe-west3-b
+    network: $(ref.new-new-network.selfLink)
+    image: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/family/ubuntu-1604-lts
+
+- name:  vm-2
+  type: vm-template.jinja
+  properties:
+    machineType: n1-standard-1
+    zone: europe-west3-b
+    network: $(ref.new-network.selfLink)
+    image: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/family/ubuntu-1604-lts
+
+- name: new-network
+  type: compute.v1.network
+  properties:
+    IPv4Range: 10.0.0.1/16
+
+- name: new-new-network
+  type: compute.v1.network
+  properties:
+    IPv4Range: 10.0.0.1/16

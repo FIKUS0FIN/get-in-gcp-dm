@@ -1,0 +1,12 @@
+resources:
+- name: vm-instance
+  type: compute.v1.instance
+  properties:
+    machineType: zones/us-central1-a/machineTypes/n1-standard-1
+    ...
+
+$(ref.[RESOURCE_NAME].[PATH_TO_PROPERTY])
+
+
+$(ref.exampleInstance.networkInterfaces[0].natIp)
+$(ref.exampleInstance.serviceAccounts[0].email)
